@@ -126,5 +126,31 @@ describe('Post controller', () => {
             sinon.assert.calledWith(res.json, sinon.match(foundPost));
         });
 
+        // Error scenario
+        it('should return status 500 on server error', () => {
+            // Arrange
+            const postId = '507asdghajsdhjgasd';
+            const error = new Error('An error occurred while finding the post.');
+
+            findPostStub.withArgs(postId).yields(error);
+
+            req = {
+                body: {
+                    id: postId ,
+                    author: 'stswenguser',
+                    title: 'My first test post',
+                    content: 'Random content'
+                    }
+            };
+
+            // Act
+            PostController.findPost(req, res);
+
+            // Assert
+            sinon.assert.calledWith(PostModel.findPost, postId);
+            sinon.assert.calledWith(res.status, 500);
+            sinon.assert.calledOnce(res.status(500).end);
+        });
+
     });
 });
