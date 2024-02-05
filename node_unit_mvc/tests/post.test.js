@@ -80,6 +80,7 @@ describe('Post controller', () => {
 
     });
 
+    //Successful Post Scenario
     describe('findPost', () => {
         var findPostStub;
 
