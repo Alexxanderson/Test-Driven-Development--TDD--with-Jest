@@ -77,7 +77,44 @@ describe('Post controller', () => {
     });
 
     describe('update', () => {
+        var updatePostStub;
 
+        beforeEach(() => {
+            res = {
+                json: sinon.spy(),
+                status: sinon.stub().returns({ end: sinon.spy() })
+            };
+
+            updatePostStub = sinon.stub(PostModel, 'updatePost');
+        });
+
+        afterEach(() => {
+            updatePostStub.restore();
+        });
+
+        // Successful Post Scenario
+        it('should return the updated post object', () => {
+            // Arrange
+            const postId = '507asdghajsdhjgasd';
+            const updatedPost = {
+                _id: postId,
+            }
+        });
+
+        // Error scenario
+        it('should return status 500 on server error', () => {
+            // Arrange
+            const postId = '507asdghajsdhjgasd';
+            const error = new Error('An error occurred while updating the post.');
+
+            updatePostStub.withArgs(postId).yields(error);
+
+            req = {
+                body: {
+                    id: postId,
+                }
+            };
+        });
     });
 
     //Successful Post Scenario
