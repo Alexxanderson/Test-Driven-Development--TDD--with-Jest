@@ -86,7 +86,7 @@ describe('Post controller', () => {
                 status: sinon.stub().returns({ end: sinon.spy() })
             };
 
-            updatePostStub = sinon.stub(PostModel, 'updatePost');
+            // updatePostStub = sinon.stub(PostModel, 'updatePost');
         });
         
         // executed after the test case
@@ -120,6 +120,7 @@ describe('Post controller', () => {
             const postId = '507asdghajsdhjgasd';
             const error = new Error('An error occurred while updating the post.');
 
+            updatePostStub = sinon.stub(PostModel, 'updatePost').yields(null, expectedResult);
             updatePostStub.withArgs(postId).yields(error);
 
             req = {
