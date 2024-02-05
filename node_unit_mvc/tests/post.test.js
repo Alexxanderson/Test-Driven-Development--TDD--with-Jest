@@ -6,6 +6,7 @@ describe('Post controller', () => {
     // Setup the responses
     let req = {
         body: {
+            id:"507asdghajsdhjgasd",
             author: 'stswenguser',
             title: 'My first test post',
             content: 'Random content'
@@ -80,6 +81,50 @@ describe('Post controller', () => {
     });
 
     describe('findPost', () => {
+        var findPostStub;
 
-    })
+        beforeEach(() => {
+            res = {
+                json: sinon.spy(),
+                status: sinon.stub().returns({ end: sinon.spy() })
+            };
+
+            findPostStub = sinon.stub(PostModel, 'findPost');
+        });
+
+        afterEach(() => {
+            findPostStub.restore();
+        });
+
+        // Successful Post Scenario
+        it('should return the found post object', () => {
+            // Arrange
+            const postId = '507asdghajsdhjgasd';
+            const foundPost = {
+                _id: postId,
+                author: 'stsweng',
+                title: 'My first test post',
+                content: 'Random content'
+            };
+
+            findPostStub.withArgs(postId).yields(null, foundPost);
+            
+            req = {
+                body: {
+                    id: postId,
+                    author: 'stswenguser',
+                    title: 'My first test post',
+                    content: 'Random content'
+                }
+            };
+
+            // Act
+            PostController.findPost(req, res);
+
+            // Assert
+            sinon.assert.calledWith(PostModel.findPost, postId);
+            sinon.assert.calledWith(res.json, sinon.match(foundPost));
+        });
+
+    });
 });
