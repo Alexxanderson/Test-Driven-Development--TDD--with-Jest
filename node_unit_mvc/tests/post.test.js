@@ -79,6 +79,7 @@ describe('Post controller', () => {
     describe('update', () => {
         var updatePostStub;
 
+        // Setup the responses
         beforeEach(() => {
             res = {
                 json: sinon.spy(),
@@ -87,7 +88,8 @@ describe('Post controller', () => {
 
             updatePostStub = sinon.stub(PostModel, 'updatePost');
         });
-
+        
+        // executed after the test case
         afterEach(() => {
             updatePostStub.restore();
         });
@@ -99,6 +101,17 @@ describe('Post controller', () => {
             const updatedPost = {
                 _id: postId,
             }
+
+            updatePostStub = sinon.stub(PostModel, 'updatePost').yields(null, expectedResult);
+
+            // Act
+            PostController.update(req, res);
+
+            // Assert
+            sinon.assert.calledWith(PostModel.updatePost, postId);
+            sinon.assert.calledWith(res.json, sinon.match({ title: req.body.title }));
+            sinon.assert.calledWith(res.json, sinon.match({ content: req.body.content }));
+            sinon.assert.calledWith(res.json, sinon.match({ author: req.body.author }));
         });
 
         // Error scenario
@@ -114,6 +127,15 @@ describe('Post controller', () => {
                     id: postId,
                 }
             };
+
+            // Act
+            PostController.update(req, res);
+
+            // Assert
+            sinon.assert.calledWith(PostModel.updatePost, postId);
+            sinon.assert.calledWith(res.status, 500);
+            sinon.assert.calledOnce(res.status(500).end);
+            
         });
     });
 
