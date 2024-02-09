@@ -1,0 +1,25 @@
+npm install -g jest
+npm install
+npm audit fix
+npm fund
+cd node_unit_mvc
+npm install -g jest
+npm install
+npm audit fix
+clear
+cd ..
+cd node_unit_test
+npm test 
+clear
+npm test
+npm test
+npm test
+npm test
+clear
+npm test
+npm test
+npm test
+npm test
+npm test
+npm test
+
